@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authentication.Cookies;
 using SwdProject.Models;
 
 namespace SwdProject
@@ -14,6 +15,13 @@ namespace SwdProject
             builder.Services.AddDbContext<SwdProjectContext>();
             builder.Services.AddScoped(typeof(SwdProjectContext));
 
+            builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+                .AddCookie(options =>
+                {
+                    options.LoginPath = "/Auth/Login";
+                    options.LogoutPath = "/Auth/Logout";
+                });
+
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.
@@ -29,6 +37,7 @@ namespace SwdProject
 
             app.UseRouting();
 
+            app.UseAuthentication();
             app.UseAuthorization();
 
             app.MapControllerRoute(
