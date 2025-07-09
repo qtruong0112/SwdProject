@@ -1,84 +1,233 @@
 ﻿@model IEnumerable<SwdProject.Models.Product>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Danh Sách Sản Phẩm";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h1>Index</h1>
+<div class="container-fluid">
+    <!-- Header Section -->
+    <div class="row mb-4">
+        <div class="col-md-12">
+            <div class="d-flex justify-content-between align-items-center">
+                <div>
+                    <h1 class="text-primary mb-0">
+                        <i class="fas fa-box-open me-2"></i>Danh Sách Sản Phẩm
+                    </h1>
+                    <p class="text-muted mb-0">Quản lý tất cả sản phẩm trong hệ thống</p>
+                </div>
+                <a asp-action="Create" class="btn btn-success btn-lg">
+                    <i class="fas fa-plus me-2"></i>Thêm Sản Phẩm Mới
+                </a>
+            </div>
+        </div>
+    </div>
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.DetailDesc)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Factory)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Image)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Name)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Price)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Quantity)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.ShortDesc)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Sold)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Target)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.DetailDesc)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Factory)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Image)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Name)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Price)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Quantity)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.ShortDesc)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Sold)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Target)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-            </td>
-        </tr>
-}
-    </tbody>
-</table>
+    <!-- Search and Filter Section -->
+    <div class="row mb-4">
+        <div class="col-md-8">
+            <div class="input-group">
+                <span class="input-group-text">
+                    <i class="fas fa-search"></i>
+                </span>
+                <input type="text" class="form-control" id="searchInput" placeholder="Tìm kiếm sản phẩm theo tên, hãng sản xuất...">
+            </div>
+        </div>
+        <div class="col-md-4">
+            <select class="form-select" id="factoryFilter">
+                <option value="">Tất cả hãng sản xuất</option>
+                <!-- Các option sẽ được load động bằng JavaScript -->
+            </select>
+        </div>
+    </div>
+
+    <!-- Products Grid -->
+    <div class="row" id="productsContainer">
+        @foreach (var item in Model) {
+            <div class="col-xl-3 col-lg-4 col-md-6 col-sm-12 mb-4 product-card" 
+                 data-name="@item.Name?.ToLower()" 
+                 data-factory="@item.Factory?.ToLower()">
+                <div class="card h-100 shadow-sm border-0 product-item">
+                    <!-- Product Image -->
+                    <div class="position-relative">
+                        @if (!string.IsNullOrEmpty(item.Image))
+                        {
+                            <img src="@item.Image" class="card-img-top product-image" alt="@item.Name" style="height: 200px; object-fit: cover;">
+                        }
+                        else
+                        {
+                            <div class="card-img-top d-flex align-items-center justify-content-center bg-light" style="height: 200px;">
+                                <i class="fas fa-image fa-3x text-muted"></i>
+                            </div>
+                        }
+                        
+                        <!-- Stock Badge -->
+                        @if (item.Quantity > 0)
+                        {
+                            <span class="badge bg-success position-absolute top-0 end-0 m-2">
+                                <i class="fas fa-check me-1"></i>Còn hàng
+                            </span>
+                        }
+                        else
+                        {
+                            <span class="badge bg-danger position-absolute top-0 end-0 m-2">
+                                <i class="fas fa-times me-1"></i>Hết hàng
+                            </span>
+                        }
+                    </div>
+
+                    <!-- Product Info -->
+                    <div class="card-body d-flex flex-column">
+                        <h5 class="card-title text-primary mb-2">@item.Name</h5>
+                        <p class="card-text text-muted small mb-2">
+                            <i class="fas fa-industry me-1"></i>@item.Factory
+                        </p>
+                        <p class="card-text flex-grow-1">
+                            @if (!string.IsNullOrEmpty(item.ShortDesc))
+                            {
+                                @(item.ShortDesc.Length > 80 ? item.ShortDesc.Substring(0, 80) + "..." : item.ShortDesc)
+                            }
+                        </p>
+                        
+                        <!-- Price and Stats -->
+                        <div class="row mb-3">
+                            <div class="col-6">
+                                <h6 class="text-success mb-0">
+                                    <i class="fas fa-dollar-sign"></i>@item.Price.ToString("N0") VNĐ
+                                </h6>
+                            </div>
+                            <div class="col-6 text-end">
+                                <small class="text-muted">
+                                    <i class="fas fa-box me-1"></i>@item.Quantity
+                                </small>
+                            </div>
+                        </div>
+
+                        <div class="row mb-3">
+                            <div class="col-6">
+                                <small class="text-info">
+                                    <i class="fas fa-shopping-cart me-1"></i>Đã bán: @item.Sold
+                                </small>
+                            </div>
+                            <div class="col-6 text-end">
+                                <small class="text-warning">
+                                    <i class="fas fa-target me-1"></i>@item.Target
+                                </small>
+                            </div>
+                        </div>
+
+                        <!-- Action Buttons -->
+                        <div class="btn-group" role="group">
+                            <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-outline-info btn-sm">
+                                <i class="fas fa-eye"></i> Chi tiết
+                            </a>
+                            <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-outline-primary btn-sm">
+                                <i class="fas fa-edit"></i> Sửa
+                            </a>
+                            <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-outline-danger btn-sm">
+                                <i class="fas fa-trash"></i> Xóa
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+
+    <!-- Empty State -->
+    @if (!Model.Any())
+    {
+        <div class="text-center py-5">
+            <i class="fas fa-box-open fa-5x text-muted mb-3"></i>
+            <h3 class="text-muted">Chưa có sản phẩm nào</h3>
+            <p class="text-muted mb-4">Bắt đầu bằng cách thêm sản phẩm đầu tiên của bạn</p>
+            <a asp-action="Create" class="btn btn-primary btn-lg">
+                <i class="fas fa-plus me-2"></i>Thêm Sản Phẩm Đầu Tiên
+            </a>
+        </div>
+    }
+</div>
+
+<style>
+    .product-item {
+        transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+    }
+
+    .product-item:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15) !important;
+    }
+
+    .product-image {
+        transition: transform 0.3s ease;
+    }
+
+    .product-item:hover .product-image {
+        transform: scale(1.05);
+    }
+
+    .btn-group .btn {
+        flex: 1;
+    }
+
+    .card-title {
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+    }
+
+    .input-group-text {
+        background-color: #f8f9fa;
+        border-right: none;
+    }
+
+    .form-control:focus {
+        box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+        border-color: #80bdff;
+    }
+</style>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Search functionality
+        const searchInput = document.getElementById('searchInput');
+        const factoryFilter = document.getElementById('factoryFilter');
+        const productCards = document.querySelectorAll('.product-card');
+
+        // Populate factory filter
+        const factories = [...new Set(Array.from(productCards).map(card => 
+            card.dataset.factory).filter(factory => factory))];
+        
+        factories.forEach(factory => {
+            const option = document.createElement('option');
+            option.value = factory;
+            option.textContent = factory.charAt(0).toUpperCase() + factory.slice(1);
+            factoryFilter.appendChild(option);
+        });
+
+        // Filter function
+        function filterProducts() {
+            const searchTerm = searchInput.value.toLowerCase();
+            const selectedFactory = factoryFilter.value.toLowerCase();
+
+            productCards.forEach(card => {
+                const name = card.dataset.name || '';
+                const factory = card.dataset.factory || '';
+                
+                const matchesSearch = name.includes(searchTerm) || factory.includes(searchTerm);
+                const matchesFactory = !selectedFactory || factory === selectedFactory;
+                
+                if (matchesSearch && matchesFactory) {
+                    card.style.display = 'block';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+        }
+
+        // Event listeners
+        searchInput.addEventListener('input', filterProducts);
+        factoryFilter.addEventListener('change', filterProducts);
+    });
+</script>
