@@ -1,74 +1,287 @@
 ﻿@model SwdProject.Models.Product
 
 @{
-    ViewData["Title"] = "Create";
+    ViewData["Title"] = "Thêm Sản Phẩm Mới";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h1>Create</h1>
+<div class="container">
+    <!-- Breadcrumb -->
+    <nav aria-label="breadcrumb" class="mb-4">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <a asp-action="Index" class="text-decoration-none">
+                    <i class="fas fa-box-open me-1"></i>Sản phẩm
+                </a>
+            </li>
+            <li class="breadcrumb-item active" aria-current="page">Thêm mới</li>
+        </ol>
+    </nav>
 
-<h4>Product</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Create">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="DetailDesc" class="control-label"></label>
-                <input asp-for="DetailDesc" class="form-control" />
-                <span asp-validation-for="DetailDesc" class="text-danger"></span>
+    <!-- Create Product Card -->
+    <div class="card shadow-lg border-0">
+        <div class="card-header bg-success text-white py-3">
+            <div class="d-flex align-items-center">
+                <i class="fas fa-plus-circle me-3 fa-2x"></i>
+                <div>
+                    <h2 class="mb-0">Thêm Sản Phẩm Mới</h2>
+                    <p class="mb-0 opacity-75">Điền thông tin chi tiết cho sản phẩm mới</p>
+                </div>
             </div>
-            <div class="form-group">
-                <label asp-for="Factory" class="control-label"></label>
-                <input asp-for="Factory" class="form-control" />
-                <span asp-validation-for="Factory" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Image" class="control-label"></label>
-                <input asp-for="Image" class="form-control" />
-                <span asp-validation-for="Image" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Name" class="control-label"></label>
-                <input asp-for="Name" class="form-control" />
-                <span asp-validation-for="Name" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Price" class="control-label"></label>
-                <input asp-for="Price" class="form-control" />
-                <span asp-validation-for="Price" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Quantity" class="control-label"></label>
-                <input asp-for="Quantity" class="form-control" />
-                <span asp-validation-for="Quantity" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="ShortDesc" class="control-label"></label>
-                <input asp-for="ShortDesc" class="form-control" />
-                <span asp-validation-for="ShortDesc" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Sold" class="control-label"></label>
-                <input asp-for="Sold" class="form-control" />
-                <span asp-validation-for="Sold" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Target" class="control-label"></label>
-                <input asp-for="Target" class="form-control" />
-                <span asp-validation-for="Target" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
-            </div>
-        </form>
+        </div>
+
+        <div class="card-body p-4">
+            <form asp-action="Create" enctype="multipart/form-data" class="needs-validation" novalidate>
+                <div asp-validation-summary="ModelOnly" class="alert alert-danger" role="alert"></div>
+                
+                <div class="row">
+                    <!-- Left Column -->
+                    <div class="col-lg-6">
+                        <!-- Basic Information -->
+                        <div class="card mb-4 border-0 bg-light">
+                            <div class="card-header bg-transparent border-0">
+                                <h5 class="mb-0 text-primary">
+                                    <i class="fas fa-info-circle me-2"></i>Thông tin cơ bản
+                                </h5>
+                            </div>
+                            <div class="card-body">
+                                <div class="mb-3">
+                                    <label asp-for="Name" class="form-label fw-bold">
+                                        <i class="fas fa-tag me-1 text-primary"></i>Tên sản phẩm *
+                                    </label>
+                                    <input asp-for="Name" class="form-control form-control-lg" 
+                                           placeholder="Nhập tên sản phẩm..." required />
+                                    <span asp-validation-for="Name" class="text-danger"></span>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label asp-for="Factory" class="form-label fw-bold">
+                                        <i class="fas fa-industry me-1 text-primary"></i>Nhà sản xuất *
+                                    </label>
+                                    <input asp-for="Factory" class="form-control" 
+                                           placeholder="Nhập tên nhà sản xuất..." required />
+                                    <span asp-validation-for="Factory" class="text-danger"></span>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-md-6 mb-3">
+                                        <label asp-for="Price" class="form-label fw-bold">
+                                            <i class="fas fa-dollar-sign me-1 text-success"></i>Giá bán (VNĐ) *
+                                        </label>
+                                        <input asp-for="Price" type="number" class="form-control" 
+                                               placeholder="0" min="0" step="1000" required />
+                                        <span asp-validation-for="Price" class="text-danger"></span>
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <label asp-for="Quantity" class="form-label fw-bold">
+                                            <i class="fas fa-boxes me-1 text-info"></i>Số lượng *
+                                        </label>
+                                        <input asp-for="Quantity" type="number" class="form-control" 
+                                               placeholder="0" min="0" required />
+                                        <span asp-validation-for="Quantity" class="text-danger"></span>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-md-6 mb-3">
+                                        <label asp-for="Sold" class="form-label fw-bold">
+                                            <i class="fas fa-shopping-cart me-1 text-warning"></i>Đã bán
+                                        </label>
+                                        <input asp-for="Sold" type="number" class="form-control" 
+                                               placeholder="0" min="0" value="0" />
+                                        <span asp-validation-for="Sold" class="text-danger"></span>
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <label asp-for="Target" class="form-label fw-bold">
+                                            <i class="fas fa-target me-1 text-danger"></i>Mục tiêu
+                                        </label>
+                                        <input asp-for="Target" class="form-control" 
+                                               placeholder="Nhập mục tiêu..." />
+                                        <span asp-validation-for="Target" class="text-danger"></span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Right Column -->
+                    <div class="col-lg-6">
+                        <!-- Image and Descriptions -->
+                        <div class="card mb-4 border-0 bg-light">
+                            <div class="card-header bg-transparent border-0">
+                                <h5 class="mb-0 text-primary">
+                                    <i class="fas fa-image me-2"></i>Hình ảnh & Mô tả
+                                </h5>
+                            </div>
+                            <div class="card-body">
+                                <div class="mb-3">
+                                    <label asp-for="Image" class="form-label fw-bold">
+                                        <i class="fas fa-camera me-1 text-primary"></i>Đường dẫn hình ảnh
+                                    </label>
+                                    <input asp-for="Image" class="form-control" 
+                                           placeholder="https://images.unsplash.com/photo-example.jpg" type="url" />
+                                    <span asp-validation-for="Image" class="text-danger"></span>
+                                    <div class="form-text">
+                                        <i class="fas fa-info-circle me-1"></i>
+                                        Nhập URL của hình ảnh sản phẩm. Gợi ý nguồn ảnh:
+                                        <br>
+                                        <small>
+                                            <a href="https://unsplash.com" target="_blank" class="text-decoration-none">
+                                                <i class="fas fa-external-link-alt me-1"></i>Unsplash.com
+                                            </a> | 
+                                            <a href="https://pexels.com" target="_blank" class="text-decoration-none">
+                                                <i class="fas fa-external-link-alt me-1"></i>Pexels.com
+                                            </a> | 
+                                            <a href="https://picsum.photos/500/500" target="_blank" class="text-decoration-none">
+                                                <i class="fas fa-external-link-alt me-1"></i>Lorem Picsum
+                                            </a>
+                                        </small>
+                                    </div>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label asp-for="ShortDesc" class="form-label fw-bold">
+                                        <i class="fas fa-align-left me-1 text-primary"></i>Mô tả ngắn
+                                    </label>
+                                    <textarea asp-for="ShortDesc" class="form-control" rows="3" 
+                                              placeholder="Nhập mô tả ngắn gọn về sản phẩm..."></textarea>
+                                    <span asp-validation-for="ShortDesc" class="text-danger"></span>
+                                    <div class="form-text">
+                                        <i class="fas fa-info-circle me-1"></i>
+                                        Mô tả ngắn sẽ hiển thị trong danh sách sản phẩm
+                                    </div>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label asp-for="DetailDesc" class="form-label fw-bold">
+                                        <i class="fas fa-file-alt me-1 text-primary"></i>Mô tả chi tiết
+                                    </label>
+                                    <textarea asp-for="DetailDesc" class="form-control" rows="6" 
+                                              placeholder="Nhập mô tả chi tiết về sản phẩm, tính năng, ưu điểm..."></textarea>
+                                    <span asp-validation-for="DetailDesc" class="text-danger"></span>
+                                    <div class="form-text">
+                                        <i class="fas fa-info-circle me-1"></i>
+                                        Mô tả chi tiết sẽ hiển thị trong trang chi tiết sản phẩm
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Action Buttons -->
+                <div class="card border-0 bg-light">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div class="text-muted">
+                                <small>
+                                    <i class="fas fa-info-circle me-1"></i>
+                                    Các trường có dấu (*) là bắt buộc
+                                </small>
+                            </div>
+                            <div class="btn-group">
+                                <button type="submit" class="btn btn-success btn-lg px-4">
+                                    <i class="fas fa-save me-2"></i>Tạo Sản Phẩm
+                                </button>
+                                <a asp-action="Index" class="btn btn-secondary btn-lg px-4">
+                                    <i class="fas fa-times me-2"></i>Hủy
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
     </div>
 </div>
 
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
+<style>
+    .card {
+        border-radius: 15px;
+        overflow: hidden;
+    }
+
+    .card-header {
+        border-radius: 15px 15px 0 0 !important;
+    }
+
+    .form-control:focus {
+        border-color: #0d6efd;
+        box-shadow: 0 0 0 0.2rem rgba(13, 110, 253, 0.25);
+    }
+
+    .form-label {
+        color: #495057;
+        margin-bottom: 0.5rem;
+    }
+
+    .btn-group .btn {
+        border-radius: 0.5rem;
+        margin-left: 0.25rem;
+    }
+
+    .breadcrumb {
+        background-color: transparent;
+        padding: 0;
+    }
+
+    .breadcrumb-item + .breadcrumb-item::before {
+        content: ">";
+        color: #6c757d;
+    }
+
+    .alert {
+        border-radius: 10px;
+        border: none;
+    }
+
+    .form-text {
+        font-size: 0.875rem;
+        color: #6c757d;
+    }
+
+    .needs-validation .form-control:invalid {
+        border-color: #dc3545;
+    }
+
+    .needs-validation .form-control:valid {
+        border-color: #198754;
+    }
+</style>
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    
+    <script>
+        // Bootstrap form validation
+        (function() {
+            'use strict';
+            window.addEventListener('load', function() {
+                var forms = document.getElementsByClassName('needs-validation');
+                var validation = Array.prototype.filter.call(forms, function(form) {
+                    form.addEventListener('submit', function(event) {
+                        if (form.checkValidity() === false) {
+                            event.preventDefault();
+                            event.stopPropagation();
+                        }
+                        form.classList.add('was-validated');
+                    }, false);
+                });
+            }, false);
+        })();
+
+        // Format currency input
+        document.querySelector('input[name="Price"]').addEventListener('input', function(e) {
+            let value = e.target.value.replace(/\D/g, '');
+            e.target.value = value;
+        });
+
+        // Auto-resize textareas
+        document.querySelectorAll('textarea').forEach(function(textarea) {
+            textarea.addEventListener('input', function() {
+                this.style.height = 'auto';
+                this.style.height = this.scrollHeight + 'px';
+            });
+        });
+    </script>
 }
