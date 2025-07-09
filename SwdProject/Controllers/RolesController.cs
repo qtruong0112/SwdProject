@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using SwdProject.Models;
 
-namespace SwdProject.Views.Roles
+namespace SwdProject.Controllers
 {
     public class RolesController : Controller
     {
