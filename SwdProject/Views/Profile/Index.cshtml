@@ -1,0 +1,77 @@
+@model SwdProject.Models.ProfileViewModel
+
+@{
+    ViewData["Title"] = "Hồ sơ cá nhân";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="row">
+    <div class="col-md-8 mx-auto">
+        <div class="card shadow">
+            <div class="card-header bg-primary text-white">
+                <h4 class="mb-0">
+                    <i class="fas fa-user me-2"></i>Hồ sơ cá nhân
+                </h4>
+            </div>
+            <div class="card-body">
+                <div class="row mb-4">
+                    <div class="col-md-3 text-center">
+                        <div class="profile-avatar mb-3">
+                            @if (!string.IsNullOrEmpty(Model.Avatar))
+                            {
+                                <img src="@Model.Avatar" alt="Avatar" class="rounded-circle img-thumbnail" style="width: 120px; height: 120px; object-fit: cover;">
+                            }
+                            else
+                            {
+                                <div class="bg-primary text-white rounded-circle d-inline-flex align-items-center justify-content-center" style="width: 120px; height: 120px; font-size: 3rem;">
+                                    <i class="fas fa-user"></i>
+                                </div>
+                            }
+                        </div>
+                        <h5 class="text-primary">@Model.FullName</h5>
+                        <small class="text-muted">@Model.RoleName</small>
+                    </div>
+                    <div class="col-md-9">
+                        <div class="row g-3">
+                            <div class="col-sm-6">
+                                <label class="form-label fw-semibold text-muted">
+                                    <i class="fas fa-envelope me-1"></i>Email
+                                </label>
+                                <p class="form-control-plaintext">@Model.Email</p>
+                            </div>
+                            <div class="col-sm-6">
+                                <label class="form-label fw-semibold text-muted">
+                                    <i class="fas fa-phone me-1"></i>Số điện thoại
+                                </label>
+                                <p class="form-control-plaintext">@(Model.Phone ?? "Chưa cập nhật")</p>
+                            </div>
+                            <div class="col-12">
+                                <label class="form-label fw-semibold text-muted">
+                                    <i class="fas fa-map-marker-alt me-1"></i>Địa chỉ
+                                </label>
+                                <p class="form-control-plaintext">@(Model.Address ?? "Chưa cập nhật")</p>
+                            </div>
+                            <div class="col-sm-6">
+                                <label class="form-label fw-semibold text-muted">
+                                    <i class="fas fa-shield-alt me-1"></i>Vai trò
+                                </label>
+                                <p class="form-control-plaintext">
+                                    <span class="badge bg-info">@Model.RoleName</span>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="d-flex gap-2 justify-content-end">
+                    <a asp-action="Edit" class="btn btn-primary">
+                        <i class="fas fa-edit me-1"></i>Chỉnh sửa thông tin
+                    </a>
+                    <a asp-action="ChangePassword" class="btn btn-outline-secondary">
+                        <i class="fas fa-key me-1"></i>Đổi mật khẩu
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div> 

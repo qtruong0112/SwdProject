@@ -30,7 +30,12 @@ public partial class SwdProjectContext : DbContext
     public virtual DbSet<User> Users { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        => optionsBuilder.UseSqlServer("Name=ConnectionStrings:MyCnn");
+    {
+        if (!optionsBuilder.IsConfigured)
+        {
+            optionsBuilder.UseSqlServer("Server=(localdb)\\MSSQLLocalDB;Database=SwdProject;Trusted_Connection=true;Encrypt=false;TrustServerCertificate=true");
+        }
+    }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
